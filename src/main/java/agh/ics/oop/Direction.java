@@ -3,6 +3,7 @@ package agh.ics.oop;
 import java.util.Arrays;
 
 public enum Direction {
+    UNDEFINED("", "Zwierzak nie wie co robić"),
     FORWARD("f", "Zwierzak idzie do przodu"),
     BACKWARD("b", "Zwierzak idzie do tyłu"),
     RIGHT("r", "Zwierzak skręca w prawo"),
@@ -16,10 +17,10 @@ public enum Direction {
         this.output = output;
     }
 
-    public static Direction getDirectionByLabel(String str){
+    public static Direction getDirectionByLabel(String str) {
         return Arrays.stream(Direction.values()).
                 filter(direction -> direction.label.equals(str)).
-                findFirst().orElse(FORWARD);
+                findFirst().orElse(UNDEFINED);
     }
 
     public String getOutput() {
