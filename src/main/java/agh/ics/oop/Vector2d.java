@@ -79,4 +79,8 @@ public class Vector2d {
                 "," + y +
                 ')';
     }
+
+    boolean isInArea(Vector2d lowerLeft, Vector2d upperRight){
+        return this.follows(lowerLeft) && this.precedes(upperRight);
+    }
 }
