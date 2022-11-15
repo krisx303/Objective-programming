@@ -3,6 +3,7 @@ package agh.ics.oop.engine;
 import agh.ics.oop.Animal;
 import agh.ics.oop.MoveDirection;
 import agh.ics.oop.Vector2d;
+import agh.ics.oop.out.ConsoleOutput;
 import agh.ics.oop.out.FrameOutput;
 import agh.ics.oop.out.IOutput;
 import agh.ics.oop.world.IWorldMap;
