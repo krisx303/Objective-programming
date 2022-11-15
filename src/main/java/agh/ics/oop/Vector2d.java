@@ -14,21 +14,21 @@ public class Vector2d {
     /**
     * Returns true when both fields have a value less than or equal to the fields of the other object
     * */
-    boolean precedes(Vector2d other){
+    public boolean precedes(Vector2d other){
         return this.x <= other.x && this.y <= other.y;
     }
 
     /**
      * Returns true when both fields have a value greater than or equal to the fields of the other object
      * */
-    boolean follows(Vector2d other){
+    public boolean follows(Vector2d other){
         return this.x >= other.x && this.y >= other.y;
     }
 
     /**
      * Returns new instance of Vector2D with fields are sum of this and other object
      * */
-    Vector2d add(Vector2d other){
+    public Vector2d add(Vector2d other){
         return new Vector2d(this.x + other.x, this.y + other.y);
     }
 
@@ -78,9 +78,5 @@ public class Vector2d {
         return "(" + x +
                 "," + y +
                 ')';
-    }
-
-    boolean isInArea(Vector2d lowerLeft, Vector2d upperRight){
-        return this.follows(lowerLeft) && this.precedes(upperRight);
     }
 }
