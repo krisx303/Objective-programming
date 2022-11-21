@@ -7,7 +7,6 @@ import agh.ics.oop.out.ConsoleOutput;
 import agh.ics.oop.out.FrameOutput;
 import agh.ics.oop.out.IOutput;
 import agh.ics.oop.world.IWorldMap;
-import agh.ics.oop.world.RectangularMap;
 
 import java.util.Arrays;
 
@@ -30,18 +29,17 @@ public class SimulationEngine implements IEngine {
     private void init(){
         Arrays.stream(positions).map(position -> new Animal(map, position)).forEach(map::place);
         output = new FrameOutput(); // or ConsoleOutput();
+        map.init();
         output.init(map);
     }
 
     @Override
     public void run() {
         init();
-        if(!(map instanceof RectangularMap rectangularMap)) return;
-        // If map is instance of RectangularMap than run code below otherwise do nothing
         output.update();
-        int size = rectangularMap.getAnimals().size();
+        int size = map.getAnimals().size();
         for (int i = 0; i < directions.length; i++) {
-            rectangularMap.getAnimals().get(i%size).move(directions[i]);
+            map.getAnimals().get(i%size).move(directions[i]);
             output.update();
         }
     }

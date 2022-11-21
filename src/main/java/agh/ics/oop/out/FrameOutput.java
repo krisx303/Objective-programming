@@ -1,28 +1,25 @@
 package agh.ics.oop.out;
 
 import agh.ics.oop.world.IWorldMap;
-import agh.ics.oop.world.RectangularMap;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-/** Class responsible for visualizing output using java Swing library.
- *  Because simple IWorldMap interface does not have any information about size of the map or the list of Animals
- *  stored on the map, I decided to use that class only for RectangularMap instances of maps.
- * */
 public class FrameOutput implements IOutput{
     JFrame frame;
-    RectangularMap map;
+    IWorldMap map;
+    private int x = 12, y = 12;
+    private int xOffset = 2, yOffset = 2;
     @Override
     public void update() {
         frame.getContentPane().removeAll();
         frame.repaint();
-        map.getAnimals().forEach(animal -> {
+        map.getMapElements().forEach(animal -> {
             JLabel label1 = new JLabel(animal.toString(), SwingConstants.CENTER);
             label1.setSize(40, 40);
             label1.setFont (label1.getFont ().deriveFont (20.0f));
-            label1.setBounds(animal.getPosition().x*40, this.map.getSizeVector().y*40-animal.getPosition().y*40, 40, 40);
+            label1.setBounds(animal.getPosition().x*40 + 40*xOffset, (-40*yOffset)+y*40-animal.getPosition().y*40, 40, 40);
             label1.setBorder(new LineBorder(new Color(0, 0, 0), 1));
             frame.add(label1);
         });
@@ -33,7 +30,7 @@ public class FrameOutput implements IOutput{
 
     private void waitASecond(){
         try {
-            Thread.sleep(1000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -41,10 +38,10 @@ public class FrameOutput implements IOutput{
 
     @Override
     public void init(IWorldMap map) {
-        this.map = (RectangularMap) map;
+        this.map = map;
         frame=new JFrame("Animals");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(this.map.getSizeVector().x*40+20, this.map.getSizeVector().y*40+80);
+        frame.setSize(x*40+20, y*40+80);
         frame.setLayout(null);
         frame.setVisible(true);
     }

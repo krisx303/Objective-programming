@@ -6,7 +6,7 @@ import agh.ics.oop.world.RectangularMap;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SimulationTest {
+public class RectangularMapTest {
     @Test
     void testAnimalMoving(){
         String[] args = new String[]{"f", "r", "forward", "b", "b", "b"};

@@ -1,8 +1,10 @@
 package agh.ics.oop;
 
+import agh.ics.oop.world.GrassField;
+import agh.ics.oop.world.IMapElement;
 import agh.ics.oop.world.IWorldMap;
 
-public class Animal {
+public class Animal implements IMapElement {
 
     /**The direction in which the animal is currently turned */
     private MapDirection direction;
@@ -38,6 +40,7 @@ public class Animal {
     }
 
     /** Check if animal is at position */
+    @Override
     public boolean isAt(Vector2d position){
         return position.equals(this.position);
     }
@@ -50,15 +53,16 @@ public class Animal {
             case RIGHT -> this.direction = this.direction.next();
             case LEFT -> this.direction = this.direction.previous();
         }
-
     }
 
-    /** Move the Animal to new position (CurrentPosition + movement) only if the new position still belongs to Area
-    * */
-
     private void moveIfInArea(Vector2d movement){
-        boolean canMove = map.canMoveTo(movement.add(position));
+        Vector2d newPosition = movement.add(position);
+        boolean canMove = map.canMoveTo(newPosition);
         if(canMove){
+            Object obj = map.objectAt(newPosition);
+            if(obj instanceof Grass grass){
+                ((GrassField)map).replaceGrass(grass);
+            }
             position = position.add(movement);
         }
     }
@@ -67,6 +71,7 @@ public class Animal {
         return direction;
     }
 
+    @Override
     public Vector2d getPosition() {
         return position;
     }
