@@ -9,6 +9,7 @@ import agh.ics.oop.out.IOutput;
 import agh.ics.oop.world.IWorldMap;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class SimulationEngine implements IEngine {
 
@@ -37,9 +38,10 @@ public class SimulationEngine implements IEngine {
     public void run() {
         init();
         output.update();
-        int size = map.getAnimals().size();
+        List<Animal> animals = map.getAnimals();
+        int size = animals.size();
         for (int i = 0; i < directions.length; i++) {
-            map.getAnimals().get(i%size).move(directions[i]);
+            animals.get(i%size).move(directions[i]);
             output.update();
         }
     }
