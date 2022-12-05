@@ -8,7 +8,6 @@ import agh.ics.oop.out.FrameOutput;
 import agh.ics.oop.out.IOutput;
 import agh.ics.oop.world.IWorldMap;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SimulationEngine implements IEngine {
@@ -27,15 +26,18 @@ public class SimulationEngine implements IEngine {
     }
 
     /** Initializing Animals from given Vector2D array and output. For debug use ConsoleOutput class, for release - FrameOutput class */
-    private void init(){
-        Arrays.stream(positions).map(position -> new Animal(map, position)).forEach(map::place);
+    private void init() throws IllegalArgumentException {
+        for (Vector2d position : positions) {
+            Animal animal = new Animal(map, position);
+            map.place(animal);
+        }
         output = new FrameOutput(); // or ConsoleOutput();
         map.init();
         output.init(map);
     }
 
     @Override
-    public void run() {
+    public void run() throws IllegalArgumentException {
         init();
         output.update();
         List<Animal> animals = map.getAnimals();

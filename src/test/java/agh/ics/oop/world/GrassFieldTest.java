@@ -32,13 +32,7 @@ class GrassFieldTest {
         Vector2d[] positions = {new Vector2d(1, 1), new Vector2d(2, 2), new Vector2d(1, 1)};
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
 
-        engine.run();
-        assertEquals(2, map.getAnimals().size());
-
-        assertTrue(map.isOccupied(new Vector2d(1, 2)));
-        assertTrue(map.isOccupied(new Vector2d(2, 2)));
-        assertInstanceOf(Animal.class, map.objectAt(new Vector2d(1, 2)));
-        assertInstanceOf(Animal.class, map.objectAt(new Vector2d(2, 2)));
+        assertThrows(IllegalArgumentException.class, engine::run);
     }
 
 }

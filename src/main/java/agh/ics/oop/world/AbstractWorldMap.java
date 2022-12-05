@@ -5,15 +5,12 @@ import agh.ics.oop.IPositionChangeObserver;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.out.MapVisualizer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
-
     protected final Map<Vector2d, IMapElement> mapElements;
-    protected Vector2d lowerLeft, upperRight;
     private final MapVisualizer visualizer;
 
     public AbstractWorldMap() {
@@ -31,42 +28,41 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException {
         if (mapElements.get(animal.getPosition()) != null || isOccupied(animal.getPosition())) {
-            return false;
+            throw new IllegalArgumentException("Animal cannot be placed on map at " + animal.getPosition());
         }
         mapElements.put(animal.getPosition(), animal);
         animal.addObserver(this);
         return true;
     }
 
-    public abstract void updateVectors();
-
     @Override
-    public void init() {
-    }
+    public void init() {}
+
+    public abstract Vector2d getLowerLeft();
+
+    public abstract Vector2d getUpperRight();
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return mapElements.get(position) != null;
-        //return mapElements.stream().anyMatch(element -> element.isAt(position));
+        return mapElements.containsKey(position);
     }
 
     @Override
     public Object objectAt(Vector2d position) {
         return mapElements.get(position);
-//        return mapElements.stream().filter(element -> element.isAt(position)).findFirst().orElse(null);
     }
 
     @Override
     public String toString() {
-        updateVectors();
-        return visualizer.draw(lowerLeft, upperRight);
+        return visualizer.draw(getLowerLeft(), getUpperRight());
     }
 
     @Override
     public List<Animal> getAnimals() {
-        return mapElements.values().stream().filter(iMapElement -> iMapElement instanceof Animal).map(iMapElement -> (Animal) iMapElement).toList();
+        return mapElements.values().stream().filter(iMapElement -> iMapElement instanceof Animal).
+                map(iMapElement -> (Animal) iMapElement).toList();
     }
 
     @Override

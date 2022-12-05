@@ -1,48 +1,58 @@
 package agh.ics.oop.world;
 
+import agh.ics.oop.Animal;
 import agh.ics.oop.Grass;
+import agh.ics.oop.MapBoundary;
 import agh.ics.oop.Vector2d;
 
 public class GrassField extends AbstractWorldMap {
     private final int startN;
     private Vector2d grassBarrier;
-    public GrassField(int n){
-        super();
+
+    private final MapBoundary mapBoundary;
+
+    public GrassField(int n) {
         startN = n;
-        lowerLeft = new Vector2d(0, 0);
-        upperRight = new Vector2d(0, 0);
+        mapBoundary = new MapBoundary();
     }
+
     @Override
-    public void init(){
-        int roundedSqrt = (int) Math.round(Math.sqrt(startN*10));
+    public void init() {
+        int roundedSqrt = (int) Math.round(Math.sqrt(startN * 10));
         grassBarrier = new Vector2d(roundedSqrt, roundedSqrt);
         for (int i = 0; i < startN; i++) {
             generateGrass();
         }
-        updateVectors();
-    }
-
-    private void generateGrass() {
-        int maxCount = (grassBarrier.x - lowerLeft.x + 1) * (grassBarrier.y - lowerLeft.y + 1);
-        if(mapElements.size() == maxCount) return; // No place on the map to generate grass
-        Vector2d vector2d = Generator.generateRandomVector(lowerLeft, grassBarrier);
-        while (isOccupied(vector2d)){
-            vector2d = Generator.generateRandomVector(lowerLeft, grassBarrier);
-        }
-        mapElements.put(vector2d, new Grass(vector2d));
     }
 
     @Override
-    public void updateVectors() {
-        int[] values = {2147483647, 0, 2147483647, 0};
-        mapElements.keySet().forEach(vector2d -> {
-            values[0] = Math.min(values[0], vector2d.x);
-            values[2] = Math.min(values[2], vector2d.y);
-            values[1] = Math.max(values[1], vector2d.x);
-            values[3] = Math.max(values[3], vector2d.y);
-        });
-        lowerLeft = new Vector2d(values[0]-1, values[2]-1);
-        upperRight = new Vector2d(values[1]+1, values[3]+1);
+    public Vector2d getLowerLeft() {
+        return mapBoundary.getLowerLeft();
+    }
+
+    @Override
+    public Vector2d getUpperRight() {
+        return mapBoundary.getUpperRight();
+    }
+
+    @Override
+    public boolean place(Animal animal) throws IllegalArgumentException {
+        super.place(animal);
+        animal.addObserver(mapBoundary);
+        mapBoundary.addElement(animal.getPosition());
+        return true;
+    }
+
+    private void generateGrass() {
+        int maxCount = (grassBarrier.x - getLowerLeft().x + 1) * (grassBarrier.y - getLowerLeft().y + 1);
+        if (mapElements.size() == maxCount) return; // No place on the map to generate grass
+        Vector2d vector2d = Generator.generateRandomVector(getLowerLeft(), grassBarrier);
+        while (isOccupied(vector2d)) {
+            vector2d = Generator.generateRandomVector(getLowerLeft(), grassBarrier);
+        }
+        Grass grass = new Grass(vector2d);
+        mapElements.put(vector2d, grass);
+        mapBoundary.addElement(grass.getPosition());
     }
 
     @Override
@@ -52,12 +62,15 @@ public class GrassField extends AbstractWorldMap {
 
     public void replaceGrass(Grass grass) {
         mapElements.remove(grass);
-        int maxCount = (upperRight.x - lowerLeft.x + 1) * (upperRight.y - lowerLeft.y + 1);
-        if(mapElements.size() == maxCount) return; // No place on the map to generate grass
-        Vector2d vector2d = Generator.generateRandomVector(lowerLeft, upperRight);
-        while (isOccupied(vector2d) || grass.getPosition().equals(vector2d)){
-            vector2d = Generator.generateRandomVector(lowerLeft, upperRight);
+        mapBoundary.removeElement(grass.getPosition());
+        int maxCount = (getUpperRight().x - getLowerLeft().x + 1) * (getUpperRight().y - getLowerLeft().y + 1);
+        if (mapElements.size() == maxCount) return; // No place on the map to generate grass
+        Vector2d vector2d = Generator.generateRandomVector(getLowerLeft(), getUpperRight());
+        while (isOccupied(vector2d) || grass.getPosition().equals(vector2d)) {
+            vector2d = Generator.generateRandomVector(getLowerLeft(), getUpperRight());
         }
-        mapElements.put(vector2d, new Grass(vector2d));
+        Grass element = new Grass(vector2d);
+        mapElements.put(vector2d, element);
+        mapBoundary.addElement(element.getPosition());
     }
 }

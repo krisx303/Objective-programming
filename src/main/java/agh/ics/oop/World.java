@@ -8,11 +8,16 @@ import agh.ics.oop.world.RectangularMap;
 
 public class World {
     public static void main(String[] args) {
-        MoveDirection[] directions = OptionParser.parse(args);
-//        IWorldMap map = new RectangularMap(10, 5);
-        IWorldMap map = new GrassField(6);
-        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
-        IEngine engine = new SimulationEngine(directions, map, positions);
-        engine.run();
+        try {
+            MoveDirection[] directions = OptionParser.parse(args);
+//            IWorldMap map = new RectangularMap(10, 5);
+          IWorldMap map = new GrassField(6);
+            Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+            IEngine engine = new SimulationEngine(directions, map, positions);
+            engine.run();
+        }catch (IllegalArgumentException ex){
+            System.out.println(ex.getMessage());
+            System.exit(0);
+        }
     }
 }
