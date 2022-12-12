@@ -1,6 +1,7 @@
 package agh.ics.oop.world;
 
 import agh.ics.oop.Animal;
+import agh.ics.oop.IFrameChangeObserver;
 import agh.ics.oop.Vector2d;
 
 import java.util.List;

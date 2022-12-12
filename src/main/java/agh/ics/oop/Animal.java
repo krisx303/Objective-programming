@@ -51,6 +51,22 @@ public class Animal implements IMapElement {
         return position.equals(this.position);
     }
 
+    @Override
+    public String getResourcePath() {
+        switch (this.direction){
+            case SOUTH -> {return "down.png";}
+            case WEST -> {return "right.png";}
+            case NORTH -> {return "up.png";}
+            case EAST -> {return "left.png";}
+        }
+        return "grass.png";
+    }
+
+    @Override
+    public String getLabel() {
+        return position.toString();
+    }
+
     /** Move the animal forward/backward if possible or changes its direction*/
     public void move(MoveDirection direction){
         switch (direction){
