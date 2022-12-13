@@ -55,9 +55,9 @@ public class Animal implements IMapElement {
     public String getResourcePath() {
         switch (this.direction){
             case SOUTH -> {return "down.png";}
-            case WEST -> {return "right.png";}
+            case WEST -> {return "left.png";}
             case NORTH -> {return "up.png";}
-            case EAST -> {return "left.png";}
+            case EAST -> {return "right.png";}
         }
         return "grass.png";
     }

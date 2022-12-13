@@ -7,15 +7,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-import java.io.InputStream;
-import java.util.HashMap;
-
 public class GuiElementBox {
 
     private VBox vBox;
     private String lastResourcePath;
+    private String lastLabel;
 
-    private IMapElement element;
+    private final IMapElement element;
     public GuiElementBox(IMapElement element) {
         this.element = element;
         loadResource(element.getResourcePath());
@@ -32,6 +30,7 @@ public class GuiElementBox {
         this.vBox.getChildren().add(label);
         this.vBox.setAlignment(Pos.CENTER);
         this.lastResourcePath = resourcePath;
+        this.lastLabel = element.getLabel();
     }
 
     public VBox getVBox() {
@@ -39,7 +38,7 @@ public class GuiElementBox {
     }
 
     public void checkForUpdate() {
-        if(!lastResourcePath.equals(element.getResourcePath())){
+        if(!lastResourcePath.equals(element.getResourcePath()) || !lastLabel.equals(element.getLabel())){
             loadResource(element.getResourcePath());
         }
     }

@@ -16,6 +16,7 @@ class GrassFieldTest {
         Vector2d[] positions = {new Vector2d(1, 1), new Vector2d(2, 2)};
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
 
+        engine.init();
         engine.run();
 
         assertTrue(map.isOccupied(new Vector2d(0, 2)));
@@ -32,7 +33,7 @@ class GrassFieldTest {
         Vector2d[] positions = {new Vector2d(1, 1), new Vector2d(2, 2), new Vector2d(1, 1)};
         SimulationEngine engine = new SimulationEngine(directions, map, positions);
 
-        assertThrows(IllegalArgumentException.class, engine::run);
+        assertThrows(IllegalArgumentException.class, engine::init);
     }
 
 }

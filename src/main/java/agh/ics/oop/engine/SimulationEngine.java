@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SimulationEngine implements IEngine, Runnable {
 
-    private final MoveDirection[] directions;
+    private MoveDirection[] directions;
 
     private final IWorldMap map;
 
@@ -27,7 +27,7 @@ public class SimulationEngine implements IEngine, Runnable {
     }
 
     /** Initializing Animals from given Vector2D array and output. For debug use ConsoleOutput class, for release - FrameOutput class */
-    private void init() throws IllegalArgumentException {
+    public void init() throws IllegalArgumentException {
         for (Vector2d position : positions) {
             Animal animal = new Animal(map, position);
             map.place(animal);
@@ -37,13 +37,13 @@ public class SimulationEngine implements IEngine, Runnable {
 
     @Override
     public void run() throws IllegalArgumentException {
-        init();
         List<Animal> animals = map.getAnimals();
         int size = animals.size();
         for (int i = 0; i < directions.length; i++) {
             animals.get(i%size).move(directions[i]);
             System.out.println(map);
-            observer.updateFrame();
+            if(observer != null)
+                observer.updateFrame();
             try {
                 Thread.sleep(moveDelay);
             } catch (InterruptedException e) {
@@ -58,5 +58,9 @@ public class SimulationEngine implements IEngine, Runnable {
 
     public void setMoveDelay(int moveDelay) {
         this.moveDelay = moveDelay;
+    }
+
+    public void setDirections(MoveDirection[] directions) {
+        this.directions = directions;
     }
 }
